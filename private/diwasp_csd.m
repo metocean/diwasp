@@ -7,12 +7,13 @@ function [S, f] = diwasp_csd(x,y,nfft,fs)
 %
 %
 
+%Make a windowed estimate of CSD
+hann=0.5*(1-cos(2*pi*(1:nfft/2)/(nfft+1)));
+win = [hann hann(end:-1:1)];
+    
 if exist('cpsd')==2
-    [S, f] = cpsd(x,y,nfft,0,nfft,fs);
+    [S, f] = cpsd(y,x,win,0,nfft,fs);
 else
-    %Make a windowed estimate of CSD
-    hann=0.5*(1-cos(2*pi*(1:nfft/2)/(nfft+1)));
-    win = [hann hann(end:-1:1)];
     nw = length(win);
     nseg=fix(length(x)/nw);
     S = zeros(nfft,1);
